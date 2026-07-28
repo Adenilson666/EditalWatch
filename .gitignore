@@ -1,0 +1,40 @@
+# Ambiente virtual
+.venv/
+
+# Configurações reais
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Testes e cobertura
+.pytest_cache/
+.pytest_temp/
+.coverage
+htmlcov/
+
+# Dados coletados e exportados
+data/raw/*
+data/exports/*
+
+# Preservar as pastas no Git
+!data/raw/.gitkeep
+!data/exports/.gitkeep
+
+# Logs
+logs/*.log
+
+# Estado de autenticação do Playwright
+playwright/.auth/
+
+# Editores
+.vscode/
+.idea/
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+
+# Metadados de instalação do Python
+*.egg-info/
