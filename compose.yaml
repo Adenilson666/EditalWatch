@@ -1,0 +1,29 @@
+services:
+  database:
+    image: postgres:18-alpine
+    container_name: editalwatch-postgres
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_DB: editalwatch
+      POSTGRES_USER: editalwatch
+      POSTGRES_PASSWORD: editalwatch_dev
+
+    ports:
+      - "5433:5432"
+
+    volumes:
+      - editalwatch_postgres_data:/var/lib/postgresql
+
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U editalwatch -d editalwatch"
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  editalwatch_postgres_data:
