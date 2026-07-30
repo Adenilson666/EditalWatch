@@ -32,3 +32,22 @@ class CollectionRunNotFoundError(Exception):
 
 class CollectionRunStateError(Exception):
     """Indica uma transição inválida no estado de uma coleta."""
+
+class DataExtractionError(Exception):
+    """Indica uma falha durante a extração de dados."""
+
+
+class RetryableAPIError(DataExtractionError):
+    """Indica uma falha temporária que permite nova tentativa."""
+
+
+class InvalidAPIResponseError(DataExtractionError):
+    """Indica que a API retornou uma estrutura inválida."""
+
+
+class RawDataStorageError(Exception):
+    """Indica uma falha ao armazenar os dados brutos."""
+
+
+class CollectionExecutionError(Exception):
+    """Indica que uma execução de coleta não foi concluída."""

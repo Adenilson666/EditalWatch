@@ -27,6 +27,7 @@ dev = [
 [project.scripts]
 editalwatch = "editalwatch.cli:main"
 editalwatch-db-check = "editalwatch.database_check:main"
+editalwatch-api-demo = "editalwatch.api_demo:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

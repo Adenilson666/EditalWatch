@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 from datetime import datetime
 from enum import StrEnum
+from pathlib import Path
+from typing import Any
 
 
 class SourceType(StrEnum):
@@ -181,3 +183,30 @@ class CollectionRun:
         duration = self.finished_at - self.started_at
 
         return duration.total_seconds()
+
+
+@dataclass(frozen=True, slots=True)
+class ApiPage():
+    """"Representa uma página válida de uma API"""
+
+    page: int
+    page_size: int
+    total_pages: int
+    total_items: int
+    items: tuple[dict[str, Any], ...]
+
+@dataclass(frozen=True, slots=True)
+class ExtractionResult():
+    """""Representa o resultado completo de uma extração"""
+
+    records: tuple[dict[str, Any], ...]
+    pages_fetched: int
+    total_items: int
+
+@dataclass(frozen=True, slots=True)
+class CollectionOutcome():
+    """""Representa o resultado de uma coleta concluida"""
+
+    run: CollectionRun
+    extraction: ExtractionResult
+    raw_file: Path
