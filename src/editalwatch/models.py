@@ -35,6 +35,7 @@ class SourceInput:
             "name",
             normalized_name,
         )
+
         object.__setattr__(
             self,
             "base_url",
@@ -78,3 +79,105 @@ class Source:
     policy_checked_at: datetime | None
     is_active: bool
     created_at: datetime
+
+
+@dataclass(frozen=True, slots=True)
+class CategoryInput:
+    """Representa os dados para cadastrar uma categoria."""
+
+    name: str
+
+    def __post_init__(self) -> None:
+        """Normaliza e valida o nome da categoria."""
+        normalized_name = self.name.strip()
+
+        object.__setattr__(
+            self,
+            "name",
+            normalized_name,
+        )
+
+        if not normalized_name:
+            raise ValueError(
+                "O nome da categoria não pode ficar vazio."
+            )
+
+        if len(normalized_name) > 100:
+            raise ValueError(
+                "O nome da categoria deve possuir "
+                "no máximo 100 caracteres."
+            )
+
+
+@dataclass(frozen=True, slots=True)
+class Category:
+    """Representa uma categoria persistida no banco."""
+
+    id: int
+    name: str
+    created_at: datetime
+
+
+class CollectionRunStatus(StrEnum):
+    """Representa os estados de uma execução de coleta."""
+
+    RUNNING = "running"
+    SUCCESS = "success"
+    PARTIAL = "partial"
+    FAILED = "failed"
+
+
+@dataclass(frozen=True, slots=True)
+class CollectionRunMetrics:
+    """Contém as quantidades produzidas por uma coleta."""
+
+    records_found: int = 0
+    records_inserted: int = 0
+    records_updated: int = 0
+    records_rejected: int = 0
+
+    def __post_init__(self) -> None:
+        """Impede métricas negativas."""
+        values = {
+            "records_found": self.records_found,
+            "records_inserted": self.records_inserted,
+            "records_updated": self.records_updated,
+            "records_rejected": self.records_rejected,
+        }
+
+        for field_name, value in values.items():
+            if value < 0:
+                raise ValueError(
+                    f"{field_name} não pode ser negativo."
+                )
+
+
+@dataclass(frozen=True, slots=True)
+class CollectionRun:
+    """Representa uma execução de coleta persistida."""
+
+    id: int
+    source_id: int
+    started_at: datetime
+    finished_at: datetime | None
+    status: CollectionRunStatus
+    records_found: int
+    records_inserted: int
+    records_updated: int
+    records_rejected: int
+    error_message: str | None
+
+    @property
+    def is_finished(self) -> bool:
+        """Informa se a execução já foi finalizada."""
+        return self.finished_at is not None
+
+    @property
+    def duration_seconds(self) -> float | None:
+        """Calcula a duração total da execução."""
+        if self.finished_at is None:
+            return None
+
+        duration = self.finished_at - self.started_at
+
+        return duration.total_seconds()

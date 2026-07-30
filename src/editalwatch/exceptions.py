@@ -1,15 +1,34 @@
 class ConfigurationError(Exception):
     """Indica uma configuração ausente ou inválida."""
 
+
 class DatabaseConnectionError(Exception):
-    """Indica um erro ao tentar conectar-se ao banco de dados."""
+    """Indica uma falha ao conectar com o PostgreSQL."""
+
 
 class DatabaseOperationError(Exception):
-    """Indica um erro ao tentar realizar uma operação no banco de dados."""
+    """Indica uma falha durante uma operação no banco."""
+
 
 class SourceAlreadyExistsError(Exception):
-    """Indica que a fonte de dados já existe."""
+    """Indica que uma fonte já está cadastrada."""
+
 
 class SourceNotFoundError(Exception):
-    """Indica que a fonte de dados não foi encontrada."""
-    
+    """Indica que uma fonte não foi encontrada."""
+
+
+class CategoryAlreadyExistsError(Exception):
+    """Indica que uma categoria já está cadastrada."""
+
+
+class CategoryNotFoundError(Exception):
+    """Indica que uma categoria não foi encontrada."""
+
+
+class CollectionRunNotFoundError(Exception):
+    """Indica que uma execução de coleta não foi encontrada."""
+
+
+class CollectionRunStateError(Exception):
+    """Indica uma transição inválida no estado de uma coleta."""
