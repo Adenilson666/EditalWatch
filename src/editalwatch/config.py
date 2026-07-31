@@ -16,6 +16,7 @@ class Settings:
     http_max_retries: int
     user_agent: str
     raw_data_dir: Path
+    export_dir: Path
 
     @classmethod
     def load(
@@ -80,12 +81,20 @@ class Settings:
             ).strip()
         )
 
+        export_dir = Path(
+            os.getenv(
+                "EDITALWATCH_EXPORT_DIR",
+                "data/export",
+            ).strip()
+        )
+
         return cls(
             database_url=database_url,
             http_timeout=http_timeout,
             http_max_retries=http_max_retries,
             user_agent=user_agent,
             raw_data_dir=raw_data_dir,
+            export_dir=export_dir,
         )
 
     @staticmethod

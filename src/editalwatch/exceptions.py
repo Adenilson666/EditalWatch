@@ -51,3 +51,6 @@ class RawDataStorageError(Exception):
 
 class CollectionExecutionError(Exception):
     """Indica que uma execução de coleta não foi concluída."""
+
+class DataTransformationError(Exception):
+    """Indica uma falha durante a transformação de dados."""

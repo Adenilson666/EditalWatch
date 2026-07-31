@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import date, datetime
 from enum import StrEnum
 from pathlib import Path
 from typing import Any
@@ -210,3 +210,58 @@ class CollectionOutcome():
     run: CollectionRun
     extraction: ExtractionResult
     raw_file: Path
+
+class NoticeStatus(StrEnum):
+    """Representa os estados permitidos de um edital."""
+
+    UNKNOWN = "unknown"
+    OPEN = "open"
+    CLOSED = "closed"
+    SUSPENDED = "suspended"
+    CANCELLED = "cancelled"
+
+
+@dataclass(frozen=True, slots=True)
+class NoticeRecord:
+    """Representa um edital limpo e validado."""
+
+    external_id: str | None
+    title: str
+    organization: str | None
+    notice_number: str | None
+    publication_date: date | None
+    registration_deadline: date | None
+    url: str
+    status: NoticeStatus
+    content_hash: str
+    raw_payload: dict[str, Any]
+
+
+@dataclass(frozen=True, slots=True)
+class TransformationIssue:
+    """Representa um registro rejeitado na transformação."""
+
+    row_number: int
+    external_id: str | None
+    reasons: tuple[str, ...]
+    raw_payload: dict[str, Any]
+
+
+@dataclass(frozen=True, slots=True)
+class NoticeTransformationResult:
+    """Agrupa o resultado completo da transformação."""
+
+    valid_records: tuple[NoticeRecord, ...]
+    rejected_records: tuple[TransformationIssue, ...]
+    input_count: int
+    duplicate_count: int
+
+    @property
+    def valid_count(self) -> int:
+        """Retorna a quantidade de registros válidos."""
+        return len(self.valid_records)
+
+    @property
+    def rejected_count(self) -> int:
+        """Retorna a quantidade de registros rejeitados."""
+        return len(self.rejected_records)
